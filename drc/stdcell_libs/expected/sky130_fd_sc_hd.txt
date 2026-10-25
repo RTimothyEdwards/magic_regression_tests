@@ -1,0 +1,2 @@
+sky130_fd_sc_hd__tapvgnd2_1 3 Metal1 minimum area < 0.083um^2 (met1.6)
+sky130_fd_sc_hd__tapvgnd_1 3 Metal1 minimum area < 0.083um^2 (met1.6)
