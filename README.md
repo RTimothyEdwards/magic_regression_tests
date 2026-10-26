@@ -44,6 +44,7 @@ common/common.sh      Shared setup and helper functions for run.sh scripts
 cif/                  CIF/GDS output tests
     maxrect_hier/     Hierarchical output of "maxrect external" layers
 database/             Database (.mag file) tests
+    cell_paths/       Cell file paths for cells shared between directories
     long_use_name/    Cell use names longer than the read and write buffers
 drc/                  DRC tests
     derived_edge/     Euclidean corner checks on contact (derived) types

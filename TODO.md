@@ -81,6 +81,9 @@ and the issues that are still open become tests that document the bug.
 
 ## Done
 
+- `database/cell_paths`:  cells shared between directories, saving into
+  other directories, and "cd" (GitHub pull request #567).
+
 - `cif/maxrect_hier`:  "maxrect external" layers were not output correctly
   when the material spans several subcells (IHP sg13cmos5l SEALBOUND).
 
