@@ -81,6 +81,12 @@ and the issues that are still open become tests that document the bug.
 
 ## Done
 
+- `cif/maxrect_hier`:  "maxrect external" layers were not output correctly
+  when the material spans several subcells (IHP sg13cmos5l SEALBOUND).
+
+- `database/long_use_name`:  cell use names over 1024 characters crashed
+  "save" and were truncated or unreadable on reading (GitHub issue #564).
+
 - `drc/derived_edge`:  Euclidean corner checks on contact (derived) types,
   for surround and spacing rules (gf180mcuD).
 - `drc/halo_rounding`:  DRC halo rounded down, so errors were missed at

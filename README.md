@@ -41,6 +41,10 @@ PDK is not installed is skipped.
 ```
 run_tests.sh          Runs all tests (any directory containing run.sh)
 common/common.sh      Shared setup and helper functions for run.sh scripts
+cif/                  CIF/GDS output tests
+    maxrect_hier/     Hierarchical output of "maxrect external" layers
+database/             Database (.mag file) tests
+    long_use_name/    Cell use names longer than the read and write buffers
 drc/                  DRC tests
     derived_edge/     Euclidean corner checks on contact (derived) types
     halo_rounding/    Errors at DRC check area boundaries
