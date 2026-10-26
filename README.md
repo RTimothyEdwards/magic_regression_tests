@@ -36,6 +36,25 @@ Most tests use the open PDKs (gf180mcuD, sky130A) as installed by
 [open_pdks](https://github.com/RTimothyEdwards/open_pdks).  A test whose
 PDK is not installed is skipped.
 
+## Automatic runs on GitHub
+
+The tests are run on GitHub by the workflows in `.github/workflows/`:
+
+- `regression.yml` builds magic and runs all of the tests.  It is a
+  reusable workflow, called by:
+  - the magic repository's `.github/workflows/regression.yml`, for every
+    pull request to magic, so the result appears as a check on the pull
+    request;
+  - `nightly.yml` in this repository, which tests the magic `master` branch
+    every night, whenever the tests change, and on request (from the
+    "Actions" tab, "Run workflow").
+- The PDKs are installed with [ciel](https://github.com/fossi-foundation/ciel)
+  at the fixed versions listed in `pdk_versions`, so that the results depend
+  on the version of magic and not on the version of the PDK.  To use the
+  same PDKs locally, run `ci/install_pdks.sh <pdk_root>` and set `PDK_ROOT`.
+- If any test fails, the `work/` directories of the failed tests are saved
+  as a downloadable artifact of the workflow run.
+
 ## Layout
 
 ```

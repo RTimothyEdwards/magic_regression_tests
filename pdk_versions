@@ -1,0 +1,14 @@
+# PDK versions used by the regression tests, installed with "ciel"
+# (https://github.com/fossi-foundation/ciel).  The version is the
+# open_pdks commit.  Only the libraries that the tests use are installed.
+#
+# The version of ciel itself is set in .github/workflows/regression.yml.
+#
+# To change a version:  install it locally (ci/install_pdks.sh <pdk_root>),
+# run the tests with PDK_ROOT=<pdk_root>, and check that the results are
+# the same as with the old version (in particular, the stdcell_libs
+# baseline) before committing the new version here.
+#
+# family	version					libraries
+sky130		792ef67037d74c8c51811eab3ce23cf793491296	sky130_fd_sc_hd
+gf180mcu	792ef67037d74c8c51811eab3ce23cf793491296	gf180mcu_fd_sc_mcu7t5v0 gf180mcu_fd_sc_mcu9t5v0

@@ -1,0 +1,89 @@
+# Build magic and run the regression tests.
+#
+# This is a "reusable workflow":  it does not run by itself, but is called
+# by other workflows, either by the one in the magic repository (for pushes
+# and pull requests to magic) or by nightly.yml in this repository.
+#
+# Inputs:
+#   magic_repository, magic_ref:  the magic source to test.  If empty, the
+#	repository and commit that triggered the calling workflow are used,
+#	which is what the magic repository's workflow wants (for a pull
+#	request, that is the pull request merged into master).
+#   tests_ref:  the version of this repository to use.
+
+name: Regression tests
+
+on:
+  workflow_call:
+    inputs:
+      magic_repository:
+        type: string
+        default: ''
+      magic_ref:
+        type: string
+        default: ''
+      tests_ref:
+        type: string
+        default: main
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Check out magic
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ inputs.magic_repository != '' && inputs.magic_repository || github.repository }}
+          ref: ${{ inputs.magic_ref != '' && inputs.magic_ref || github.ref }}
+          path: magic
+
+      - name: Check out the regression tests
+        uses: actions/checkout@v7
+        with:
+          repository: RTimothyEdwards/magic_regression_tests
+          ref: ${{ inputs.tests_ref }}
+          path: tests
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tcl-dev tk-dev libcairo-dev
+
+      - name: Build magic
+        working-directory: magic
+        run: |
+          ./configure
+          make prepare
+          make -j$(nproc)
+          make install DESTDIR=${GITHUB_WORKSPACE}/staging
+
+      - name: Install PDKs
+        run: |
+          # The ciel version is fixed, like the PDK versions in pdk_versions
+          pipx install ciel==3.0.0
+          tests/ci/install_pdks.sh ${GITHUB_WORKSPACE}/pdk
+
+      - name: Run the regression tests
+        env:
+          MAGIC: env CAD_ROOT=${{ github.workspace }}/staging/usr/local/lib bash ${{ github.workspace }}/staging/usr/local/bin/magic
+          PDK_ROOT: ${{ github.workspace }}/pdk
+        run: |
+          cd magic && echo "magic: $(git log -1 --format='%h %s')" && cd ..
+          set +e -o pipefail
+          tests/run_tests.sh 2>&1 | tee results.txt
+          status=$?
+          # Show the results on the workflow run's summary page
+          echo '```' >> ${GITHUB_STEP_SUMMARY}
+          cat results.txt >> ${GITHUB_STEP_SUMMARY}
+          echo '```' >> ${GITHUB_STEP_SUMMARY}
+          exit ${status}
+
+      - name: Save the output of failed tests
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: failed-tests
+          path: tests/**/work/
+          if-no-files-found: ignore

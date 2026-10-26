@@ -1,0 +1,23 @@
+# Run the regression tests on the current magic master branch:
+#   - every night, after the magic repository is mirrored to GitHub;
+#   - whenever the tests in this repository change;
+#   - by hand, from the "Actions" tab ("Run workflow").
+
+name: Nightly regression tests
+
+on:
+  schedule:
+    # 09:00 UTC is 4am (EST) or 5am (EDT) in New York, after the 3am
+    # mirror of the magic repository to GitHub.
+    - cron: '0 9 * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  regression:
+    uses: ./.github/workflows/regression.yml
+    with:
+      magic_repository: RTimothyEdwards/magic
+      magic_ref: master
+      tests_ref: ${{ github.sha }}
