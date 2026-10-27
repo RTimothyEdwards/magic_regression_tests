@@ -84,6 +84,8 @@ and the issues that are still open become tests that document the bug.
 - `database/cell_paths`:  cells shared between directories, saving into
   other directories, and "cd" (GitHub pull request #567).
 
+- `cif/gds_magnification`:  GDS instances with a magnification (including
+  non-integer values) were read at the wrong size (Chipalooza slot_4).
 - `cif/maxrect_hier`:  "maxrect external" layers were not output correctly
   when the material spans several subcells (IHP sg13cmos5l SEALBOUND).
 

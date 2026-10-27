@@ -60,7 +60,8 @@ The tests are run on GitHub by the workflows in `.github/workflows/`:
 ```
 run_tests.sh          Runs all tests (any directory containing run.sh)
 common/common.sh      Shared setup and helper functions for run.sh scripts
-cif/                  CIF/GDS output tests
+cif/                  CIF/GDS input and output tests
+    gds_magnification/  GDS instances with magnification
     maxrect_hier/     Hierarchical output of "maxrect external" layers
 database/             Database (.mag file) tests
     cell_paths/       Cell file paths for cells shared between directories
