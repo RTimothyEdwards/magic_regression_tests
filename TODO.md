@@ -1,6 +1,6 @@
 # To do
 
-## Next step:  survey past issues for test cases
+## Survey of past issues (done 2026-10-27)
 
 Go through the places where past issues have been described and write
 down a list of regression tests to implement.  For each one, record:
@@ -12,7 +12,19 @@ down a list of regression tests to implement.  For each one, record:
   would document the bug);
 - which PDK or tech file it needs.
 
-Put the list below, under "Tests to implement", and work through it.
+The list is below, under "Tests to implement".  Work through it a couple
+of items at a time, starting with the [A] items.
+
+## Note:  running old versions of magic
+
+To check that a test catches a bug, build the version before the fix in a
+separate directory with `./configure --prefix=<dir>`, `make`, `make
+install`, and run the test with `MAGIC=<dir>/bin/magic`.  Do not stage an
+old version with `make install DESTDIR=...` and CAD_ROOT:  before some
+point in 2026, `magicdnull` and `magicexec` load `magic.tcl` (and so the
+magic library) from the compiled-in install directory, so the staged copy
+silently runs whatever is installed in /usr/local.  Check the "revision"
+line at startup.
 
 ## Sources of test cases
 
@@ -75,12 +87,269 @@ closed or still needs work.  This fits with the survey above:  writing a
 test for an issue is a good way to confirm it is fixed before closing it,
 and the issues that are still open become tests that document the bug.
 
+Open issues (as of 2026-10-27) where Tim's last comment says the problem
+was fixed, or the reporter confirmed it:  #28, #39, #94, #95, #104, #105,
+#106, #107, #127, #134, #147, #163, #188, #196, #223, #243, #251, #298,
+#304, #309, #318, #366, #457, #488, #532.  #549 is a duplicate of #470.
+These look closable;  the ones with an [A] test above can be closed once
+the test passes.
+
 ## Tests to implement
 
-(To be filled in by the survey above.)
+Surveyed on 2026-10-27 from the sources above:  the notes in
+`/home/tim/devel/magic/` (named `devel:` below), the GitHub issues (`#N`),
+and the old VEZZAL tests.  "Fixed" and "open" are taken from the notes and
+issue comments and should be confirmed when the test is written.  Each
+entry gives a proposed test name, what to check, the source, and the
+PDK.  Items are marked:
+
+- **[A]**  fixed, with a small example or a short recipe:  write these first.
+- **[B]**  fixed, but the only example is a large design that would need
+  to be reduced to a small test case first.
+- **[C]**  still open (or status unclear):  the test documents the bug, and
+  is expected to fail until it is fixed.
+
+Not listed:  issues that turned out to be user errors, PDK errors (fixed in
+open_pdks), problems in other tools (klayout, netgen, OpenROAD), build and
+installation problems, and questions.
+
+### Database, editing, and commands
+
+- **[A]** `database/splitpaint_box`:  `splitpaint` with a zero-size box
+  crashed (#94), and painted on a locked layer (#95).  Fixed in 8.3.231.
+  scmos.
+- **[A]** `database/copy_undo`:  repeated copy of a subcell followed by
+  repeated undo left the wrong copies.  devel:Mark/copy_undo_issue has a
+  script (fixed 2025-03).  sky130A.
+- **[A]** `database/stretch_corruption`:  "stretch" corrupted the database
+  (DBErase during a search of the same plane).  devel:corruption has a
+  recipe (fixed 2025-11).  gf180mcuD.
+- **[A]** `database/bbox_labels`:  cell bounding box included label text
+  of subcells.  devel:bbox_labels (fixed 2025-08).
+- **[A]** `database/fixed_bbox_scaling`:  FIXED_BBOX rescaled wrongly
+  (`tech lambda 1 1; property FIXED_BBOX ...`).  devel:bbox_scaling
+  (fixed 2025-02).  Combine with mask hints:  MASKHINTS_ properties were
+  not scaled on .mag read and write like FIXED_BBOX (devel:Sylvain/properties,
+  fixed 2024-05), and a large number of mask hints overflowed a string
+  buffer on read-back (devel:Vicente/scripting, fixed 2023).  scmos.
+- **[A]** `database/erase_label_corner`:  erasing a corner of a shape
+  made its label lose its attachment (#305, fixed 8.3.478).  sky130A.
+- **[A]** `database/select_flat_labels`:  `select flat` prefixed labels in
+  the top cell with "Topmost cell of the window/".  devel:Simon/tia_core
+  (fixed 2022).
+- **[A]** `database/select_area_subcell`:  `select area subcell` did not
+  select subcells.  devel:select_cell (fixed 2025-02).  Related open items
+  [C]:  `select more cell <instance>` fails (#295);  `select area` with
+  several contact layers fails (#504).
+- **[A]** `database/exit_code`:  batch mode always exited with code 0,
+  even after `exit -1` (devel:exit_code, fixed 2023-11).  Also the startup
+  script argument problem:  `magic -rcfile ... script.tcl` could not run
+  `magic::` commands that worked with `source` (devel:Aquiles/scripting,
+  fixed).  scmos.
+- **[A]** `database/units_save`:  `units` with FIXED_BBOX gave a property
+  command missing a key, and `save <x>.tcl` misreported the file name
+  (devel:units, fixed 2026-03).
+- **[A]** `database/dup_instance`:  the duplicate-instance check compared
+  only bounding boxes, so a flipped copy at the same place was deleted
+  (devel:dup_inst, fixed 2023-02).  Also applies to GDS read.  scmos.
+- **[C]** `database/undo_properties`:  changing instance properties
+  (Ctrl+P, gencell parameters) corrupts the undo stack (#501,
+  devel:Nematallah).  Open.
+- **[C]** `database/writeall_scaled`:  `writeall force` with unexpanded
+  subcells corrupts cells when the PDK uses scaling (#518).  Open, no
+  response yet.
+- **[C]** `database/long_home_rcfile`:  buffer overflow when HOME is very
+  long and `-rcfile` is relative (#489, includes a reproducer script).
+  Open.
+- **[C]** `database/unicode_path`:  cell name check applied to the whole
+  path, failing on non-ASCII home directories (#216).  Open.
+- **[C]** `database/tech_include`:  `include` in tech files does not find
+  relative or absolute paths (#303).  Open, no response yet.
+- **[C]** `database/load_dereference`:  `load -dereference` of a .mag
+  outside the current directory fails (#231).  Status unclear.
+
+### DRC
+
+- **[A]** `drc/vezzal_rules`:  the VEZZAL "case4" tests:  small sky130A
+  layouts `met1.mag` to `met5.mag` and `via1.mag` to `via4.mag` with
+  expected DRC reports (saicharan0112/vezzal on GitHub,
+  `regression/testcases/magic/case4`).  Copy and update the expected
+  results (check the license:  GPL-3 per the README).  sky130A.
+- **[A]** `drc/cifmaxwidth_split`:  `cifmaxwidth` flagged false errors on
+  split tiles (devel:Mark/DRC_on_45s, fixed 2025-08).
+- **[A]** `drc/trigger_clip`:  false deep-nwell spacing errors from
+  trigger rules not clipped to the check area (devel:Reda/dnwell, fixed
+  2023-08).  sky130A.
+- **[A]** `drc/offlayout_errors`:  DRC errors outside the layout, heading
+  off to infinity, from an invalid clip area (devel:spurious_drc, fixed
+  2026-03).  ihp-sg13cmos5l.
+- **[B]** `drc/runlength`:  wide-metal run-length errors missed
+  (devel:runlength, fixed 2026-04).  ihp-sg13cmos5l.
+- **[B]** `drc/noninteracting`:  latch-up rule (LU.c, pSD.i/j) false
+  errors from the "noninteracting" operator (devel:Leo/latchup_error has
+  `counter.gds`, fixed 2025-12).  ihp-sg13cmos5l or sg13g2.
+- **[C]** `drc/bloat_all_dist`:  `bloat-all ... <dist>` results not
+  rotationally symmetric (devel:Mark/bloat_dist has a reduced
+  `small_test`).  Status unclear;  also a DRC run time issue
+  (devel:bloat_all_dist/ihp_tests).
+- **[C]** `drc/overlap_enclosed`:  disallowed overlap between cells is not
+  flagged when one shape completely covers the other (#302).  Open.
+- **[C]** `drc/subcell_why`:  `drc why` on errors in subcells
+  (devel:drc_subcell).  Status unclear.
+
+### CIF and GDS input and output
+
+- **[A]** `cif/gds_nonmanhattan`:  GDS write and read-back of
+  non-Manhattan shapes at various angles (devel:fixsides, after the TT_SIDE
+  change, fixed 2026-01).  scmos.
+- **[A]** `cif/gds_compressed_ref`:  GDS_FILE names `x.gds` but the file
+  is now `x.gds.gz` (#366, devel:compression;  fixed 8.3.519).
+- **[A]** `cif/gds_instance_names`:  instance names lost on .mag to GDS to
+  .mag (#196, fixed 8.3.340).
+- **[A]** `cif/gds_port_index`:  a very large port index made GDS output
+  take forever (devel:Juan/gds_issue, fixed).
+- **[C]** `cif/gds_cell_names`:  GDS cell names that differ only in case
+  (#126) and names with many `$` (#97).  No response yet on either.
+- **[A]** `cif/cif_hier_property`:  the CIFhier property forces
+  hierarchical processing (devel:cif_hier, 2023).
+- **[C]** `cif/gds_label_newline`:  labels containing a newline break the
+  saved .mag file (#397).  Status unclear.
+- **[C]** `cif/contact_no_cuts`:  a contact area that passes DRC but has no
+  room for any cut should be an error (devel:no_contact_area;  related
+  #247).  Open.
+- **[C]** `cif/bridge`:  the `bridge` operator behaves differently at
+  different levels of the hierarchy (devel:Sylvain/extra_psdm,
+  devel:Sylvain/hvntm).  Open.
+
+### Extraction
+
+- **[A]** `extract/sd_area_perim`:  source/drain area and perimeter were
+  zero in scmos (devel:Claudio, devel:ext2spice;  fixed).  Related:  two
+  diode-connected FETs sharing source and drain (#237).  scmos and sky130A.
+- **[A]** `extract/port_label_choice`:  a non-port label was chosen over a
+  port label (#243, devel:Mitch/issue_243;  fixed 8.3.408), and the
+  default substrate name VSUBS was chosen over the label "ground"
+  (devel:Leo/vsubs_pin, devel:Aleksandar;  fixed 2026-02).  sky130A.
+- **[A]** `extract/abstract_instance`:  an abstract cell with no devices
+  (a logo) was defined in the netlist but not instanced
+  (devel:Leo/logo_issue, fixed 2026-03).
+- **[A]** `extract/subcell_substrate`:  a subcell extracted by itself had
+  capacitors to "0" instead of the substrate node (devel:Igor, fixed
+  2026-02).  sky130A.
+- **[A]** `extract/isolated_pwell_label`:  a label on pwell inside deep
+  nwell shorted the isolated pwell to the substrate
+  (devel:Mark/labeled_iso, fixed 2026-07), and the double free that the fix
+  caused (devel:Mark/shaper_extract).  sky130A.
+- **[A]** `extract/floating_label`:  a floating label disconnected a pin
+  (devel:Mitch/floating_label_error, fixed 2026-03).
+- **[A]** `extract/unique_notopports`:  `extract unique notopports` merged
+  two differently-placed labels with the same name (devel:Mitch/issue_186,
+  fixed 2022).  [C] #317 reports a later regression:  check.
+- **[A]** `extract/hierarchy_off`:  `ext2spice hierarchy off` did not
+  flatten a wrapper subcircuit around a primitive device (#298,
+  devel:Robin;  fixed 8.3.468).  sky130A.
+- **[A]** `extract/device_params`:  `device bjt` (and FET) parameters off
+  by one (`argstart` in efBuildDevice, devel:Mitch/bjt_extraction, fixed
+  2026-01, IHP);  duplicated parameters (#223, #251, fixed).
+- **[A]** `extract/name_mangling`:  instance names containing `/` (#70) and
+  cell names starting with a digit (#71).  Fixed 2021.
+- **[A]** `extract/param_roundoff`:  parameter values printed with
+  round-off error (devel:Mark/roundoff_error, fixed 2025-01).
+- **[B]** `extract/flattened_io_ports`:  8.3.585 dropped ports when I/O
+  subcells were flattened (#488, devel:Mitch/test_magic_missing_ports has a
+  script and expected output;  fixed 8.3.602).  gf180mcuD.
+- **[B]** `extract/abstract_stdcells`:  substrate extraction from LEF
+  abstract views of standard cells (devel:Anton/bad-extract, fixed 2022).
+- **[B]** `extract/drc_then_extract`:  extraction crashed after `drc check`
+  with the "full" DRC style left client data on tiles
+  (devel:Diarmuid/sunrise).  Check status.
+- **[C]** `extract/deterministic`:  the same input should give
+  byte-identical .ext and SPICE output (#30, #304, #551;  for extresist
+  #538).  Open.  Easy to write:  extract twice and compare.
+- **[C]** `extract/pmoscap_length`:  a 12x12 pmoscap extracts with L=6
+  (devel:Sylvain/pmoscap, 2026-09).  gf180mcuD.  Open.
+- **[C]** `extract/pnp_params`:  PNP M=-nan and wrong area (#246,
+  devel:Mitch/bipolar_issue).  Status unclear.
+- **[C]** `extract/label_position_cap`:  capacitance of one node depends
+  on the position of another node's label (#45).  Status unclear.
+
+### Parasitic R-C extraction (extresist)
+
+These overlap with the current work in `resis/`, so the open items may be
+better written as part of that work.
+
+- **[A]** `resis/double_counting`:  resistance double-counted on a wire
+  with a third branch (devel:Martin/double_counting, fixed 2025-08).
+  sky130A.
+- **[A]** `resis/no_substrate_resistor`:  a metal resistor with no
+  substrate entry crashed ResReadExt (devel:Torleif/TB_magic_IHP_RM1_ext,
+  fixed).  [C] follow-up from the same notes:  `resistor tee` does not
+  split the capacitance.  IHP.
+- **[A]** `resis/degenerate_triangle`:  #539 (devel:Torleif/
+  extresist_alloc_error, fixed 8.3.672).
+- **[A]** `resis/residue_recursion`:  #548, a contact whose residue
+  includes itself sent FindStartTile into infinite recursion
+  (devel:extresist_crash has `magic_bug_repro`, fixed).  sky130A.
+- **[A]** `resis/res_ext_path`:  the .res.ext file follows `extract path`
+  (devel:Ahmed/rcx, fixed).
+- **[A]** `resis/empty_label`:  an empty-string label became a node name
+  (devel:Taylor, fixed).  sky130A.
+- **[C]** `resis/killed_port`:  extresist killed a port node ("killnode
+  VSS"), disconnecting it (devel:extresist_open_net, from netgen #108;
+  also devel:Istvan, devel:Leonardo).  Status unclear.
+- **[C]** Open extresist and ext2spice issues from GitHub, each with a
+  small example:  #550 (coupling capacitance moved to substrate and
+  double-counted), #553 (resistor pi model applied to other devices), #556
+  (`resistor tee` applies length offsets twice), #559 (coupling caps on
+  resistor device terminals), #557 (five defects on ihp-sg13g2, with a
+  bench of 63 metal-only layouts:  possibly a source of many tests).
+
+### LEF and DEF
+
+- **[A]** `lef/write_hide_antenna`:  ANTENNAGATEAREA missing with
+  `lef write -hide` (devel:Kareem/reproducible, #236;  fixed).  sky130A.
+- **[A]** `lef/write_first_call`:  the first `lef write` produced
+  incorrect output (SelectRootDef not set;  devel:Sylvain, fixed 2024-03).
+- **[A]** `lef/write_hide_obstructions`:  obstructions with `-hide`:  gaps
+  between metal stripes (#204, devel:Anton/lef-issue;  OBS_BBOX
+  workaround), and nwell (MASTERSLICE) obstruction (#300,
+  devel:Sylvain/lef_again).  Confirm which parts are fixed.
+- **[A]** `def/read_special_routes`:  `def read` with several ROUTED/FIXED
+  segments on special nets (#264, devel:Haufe/DEF has `testcase.def`;
+  fixed).
+- **[A]** `def/nondefault_rules`:  NONDEFAULTRULE handling in `def read`:
+  a net with the rule but no routes passed it to the next net
+  (devel:Leo/nondefault_rule, 2026-07, check status);  width not restored
+  after a rule (devel:Sylvain/nondefaultrule, fixed);  `def write` wire
+  ends offset using the default width (devel:def_write, fixed).  Test
+  files in devel:nondefaults.
+- **[A]** `def/read_then_gds`:  buffer overflow writing GDS after `def
+  read` (file locking state;  #253, devel:Haufe;  fixed).
+- **[A]** `lef/read_library`:  smoke test reading the sky130_fd_sc_hd GDS
+  and LEF and checking the cells read (VEZZAL cases 1 and 2).
+- **[C]** `lef/write_hide_crash`:  `lef write -hide` crash
+  (devel:Abhinav, devel:John).  Status unclear.
+- **[C]** `def/diearea`:  DIEAREA to FIXED_BBOX on `def read` and back on
+  `def write` (devel:Kareem).  Check whether implemented.
+
+### Other sources not yet used
+
+- Closed GitHub issues (140) were not surveyed;  most fixes are also in the
+  devel notes above.
+- About 35 devel directories have no notes (e.g. Ahmar, Darryl, Jakob,
+  snake_res, cell_mgr, flattened_def).  Check them only if needed.
+- Netgen tests in VEZZAL (cases 1 to 7) belong in a netgen test suite.
 
 ## Done
 
+- `database/split_tile_paint`:  painting over split tiles.  Fails with
+  8.3.534 (the August 2025 "stripe" bug) and 8.3.587 (the January 2026
+  "corner" bug).
+- `cif/gds_aref`:  reading arrays (rotation, single row or column with a
+  bogus step, fine pitch).  Fails with 8.3.606 and 8.3.621 (the three
+  fixes of February and March 2026).
+  `common/gdslib.py` now holds the GDS writer and flattener used by this
+  test and `cif/gds_magnification`.
 - `database/cell_paths`:  cells shared between directories, saving into
   other directories, and "cd" (GitHub pull request #567).
 

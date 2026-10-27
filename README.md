@@ -61,11 +61,13 @@ The tests are run on GitHub by the workflows in `.github/workflows/`:
 run_tests.sh          Runs all tests (any directory containing run.sh)
 common/common.sh      Shared setup and helper functions for run.sh scripts
 cif/                  CIF/GDS input and output tests
+    gds_aref/         GDS arrays with rotation and a single row or column
     gds_magnification/  GDS instances with magnification
     maxrect_hier/     Hierarchical output of "maxrect external" layers
 database/             Database (.mag file) tests
     cell_paths/       Cell file paths for cells shared between directories
     long_use_name/    Cell use names longer than the read and write buffers
+    split_tile_paint/ Painting over split (non-Manhattan) tiles
 drc/                  DRC tests
     derived_edge/     Euclidean corner checks on contact (derived) types
     halo_rounding/    Errors at DRC check area boundaries
