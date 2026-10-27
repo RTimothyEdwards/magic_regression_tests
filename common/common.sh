@@ -34,6 +34,25 @@ require_pdk() {
     fi
 }
 
+# Skip the test (exit code 77) if magic is older than the given version
+# (e.g. "require_magic_version 8.3.688").  Use this in a test that goes
+# with a fix to magic, giving the first version that has the fix, so that
+# the test is skipped instead of failing when run with an older magic (for
+# example, on GitHub before the magic repository has been mirrored).
+
+require_magic_version() {
+    local have
+    have=$(${MAGIC} --version 2>/dev/null | tail -n 1)
+    if [ -z "${have}" ]; then
+	echo "  (could not get the magic version;  running the test anyway)"
+	return
+    fi
+    if [ "$(printf '%s\n%s\n' "$1" "${have}" | sort -V | head -n 1)" != "$1" ]; then
+	echo "SKIP: $(basename ${TESTDIR}) needs magic $1 (this is ${have})"
+	exit 77
+    fi
+}
+
 # single_rule_tech <source tech> <output tech> <drc section body>
 #
 # Copy a tech file, replacing the entire contents of its "drc" section

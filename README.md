@@ -84,6 +84,12 @@ what the test checks and why.  `run.sh` should:
 - put all generated files in `${WORK}` (the test's `work/` directory,
   which is created fresh on each run and is not checked in);
 - call `require_pdk <name>` for each PDK it needs;
+- if the test goes with a fix to magic, call `require_magic_version
+  <version>` with the first magic version that has the fix (the version in
+  magic's VERSION file after the fix), so that the test is skipped rather
+  than failing with an older magic.  A test pushed together with a fix
+  would otherwise fail on GitHub until the magic repository is mirrored
+  there overnight;
 - end with `finish <status>`, where status 0 means pass.
 
 `common.sh` also provides `run_magic` (runs `${MAGIC}` in batch mode) and
