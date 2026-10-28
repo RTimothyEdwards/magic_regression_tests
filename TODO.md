@@ -141,11 +141,6 @@ installation problems, and questions.
   select subcells.  devel:select_cell (fixed 2025-02).  Related open items
   [C]:  `select more cell <instance>` fails (#295);  `select area` with
   several contact layers fails (#504).
-- **[A]** `database/exit_code`:  batch mode always exited with code 0,
-  even after `exit -1` (devel:exit_code, fixed 2023-11).  Also the startup
-  script argument problem:  `magic -rcfile ... script.tcl` could not run
-  `magic::` commands that worked with `source` (devel:Aquiles/scripting,
-  fixed).  scmos.
 - **[A]** `database/units_save`:  `units` with FIXED_BBOX gave a property
   command missing a key, and `save <x>.tcl` misreported the file name
   (devel:units, fixed 2026-03).
@@ -314,9 +309,12 @@ better written as part of that work.
   between metal stripes (#204, devel:Anton/lef-issue;  OBS_BBOX
   workaround), and nwell (MASTERSLICE) obstruction (#300,
   devel:Sylvain/lef_again).  Confirm which parts are fixed.
-- **[A]** `def/read_special_routes`:  `def read` with several ROUTED/FIXED
-  segments on special nets (#264, devel:Haufe/DEF has `testcase.def`;
-  fixed).
+- **[C]** `def/special_shield`:  `+ SHIELD <net> <layer> <width> ...` as
+  the *first* segment of a special net is not recognized ("Unknown net
+  property SHIELD in NET definition"), and the wire is lost:
+  "SHIELD" is missing from `net_property_keys` in
+  `DefReadNets()` (found while writing `def/read_special_routes`, where
+  SHIELD as a later segment works).  Open.
 - **[A]** `def/nondefault_rules`:  NONDEFAULTRULE handling in `def read`:
   a net with the rule but no routes passed it to the next net
   (devel:Leo/nondefault_rule, 2026-07, check status);  width not restored
@@ -342,6 +340,11 @@ better written as part of that work.
 
 ## Done
 
+- `database/exit_code`:  exit status in batch mode (always 0 before
+  8.3.447).  The related startup script problem (devel:Aquiles/scripting)
+  needs a graphics display and is not tested.
+- `def/read_special_routes`:  several routed segments on DEF special nets
+  (#264;  fails with 8.3.425).
 - `database/split_tile_paint`:  painting over split tiles.  Fails with
   8.3.534 (the August 2025 "stripe" bug) and 8.3.587 (the January 2026
   "corner" bug).

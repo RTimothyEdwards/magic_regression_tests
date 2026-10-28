@@ -66,8 +66,11 @@ cif/                  CIF/GDS input and output tests
     maxrect_hier/     Hierarchical output of "maxrect external" layers
 database/             Database (.mag file) tests
     cell_paths/       Cell file paths for cells shared between directories
+    exit_code/        Exit status of magic in batch mode
     long_use_name/    Cell use names longer than the read and write buffers
     split_tile_paint/ Painting over split (non-Manhattan) tiles
+def/                  LEF and DEF tests
+    read_special_routes/  DEF special nets with several routed segments
 drc/                  DRC tests
     derived_edge/     Euclidean corner checks on contact (derived) types
     halo_rounding/    Errors at DRC check area boundaries
