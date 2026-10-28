@@ -144,9 +144,6 @@ installation problems, and questions.
 - **[A]** `database/units_save`:  `units` with FIXED_BBOX gave a property
   command missing a key, and `save <x>.tcl` misreported the file name
   (devel:units, fixed 2026-03).
-- **[A]** `database/dup_instance`:  the duplicate-instance check compared
-  only bounding boxes, so a flipped copy at the same place was deleted
-  (devel:dup_inst, fixed 2023-02).  Also applies to GDS read.  scmos.
 - **[C]** `database/undo_properties`:  changing instance properties
   (Ctrl+P, gencell parameters) corrupts the undo stack (#501,
   devel:Nematallah).  Open.
@@ -197,8 +194,6 @@ installation problems, and questions.
 - **[A]** `cif/gds_nonmanhattan`:  GDS write and read-back of
   non-Manhattan shapes at various angles (devel:fixsides, after the TT_SIDE
   change, fixed 2026-01).  scmos.
-- **[A]** `cif/gds_compressed_ref`:  GDS_FILE names `x.gds` but the file
-  is now `x.gds.gz` (#366, devel:compression;  fixed 8.3.519).
 - **[A]** `cif/gds_instance_names`:  instance names lost on .mag to GDS to
   .mag (#196, fixed 8.3.340).
 - **[A]** `cif/gds_port_index`:  a very large port index made GDS output
@@ -340,6 +335,11 @@ better written as part of that work.
 
 ## Done
 
+- `database/dup_instance`:  coincident instances with different
+  transforms were discarded as duplicates (fails with 8.3.373 from before
+  the fix).
+- `cif/gds_compressed_ref`:  GDS output when the vendor GDS file has been
+  compressed (#366;  fails with 8.3.518).
 - `database/exit_code`:  exit status in batch mode (always 0 before
   8.3.447).  The related startup script problem (devel:Aquiles/scripting)
   needs a graphics display and is not tested.
