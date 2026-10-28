@@ -115,32 +115,19 @@ installation problems, and questions.
 
 ### Database, editing, and commands
 
-- **[A]** `database/splitpaint_box`:  `splitpaint` with a zero-size box
-  crashed (#94), and painted on a locked layer (#95).  Fixed in 8.3.231.
-  scmos.
-- **[A]** `database/copy_undo`:  repeated copy of a subcell followed by
-  repeated undo left the wrong copies.  devel:Mark/copy_undo_issue has a
-  script (fixed 2025-03).  sky130A.
-- **[A]** `database/stretch_corruption`:  "stretch" corrupted the database
-  (DBErase during a search of the same plane).  devel:corruption has a
-  recipe (fixed 2025-11).  gf180mcuD.
-- **[A]** `database/bbox_labels`:  cell bounding box included label text
-  of subcells.  devel:bbox_labels (fixed 2025-08).
-- **[A]** `database/fixed_bbox_scaling`:  FIXED_BBOX rescaled wrongly
-  (`tech lambda 1 1; property FIXED_BBOX ...`).  devel:bbox_scaling
-  (fixed 2025-02).  Combine with mask hints:  MASKHINTS_ properties were
-  not scaled on .mag read and write like FIXED_BBOX (devel:Sylvain/properties,
-  fixed 2024-05), and a large number of mask hints overflowed a string
-  buffer on read-back (devel:Vicente/scripting, fixed 2023).  scmos.
-- **[A]** `database/erase_label_corner`:  erasing a corner of a shape
-  made its label lose its attachment (#305, fixed 8.3.478).  sky130A.
-- **[A]** `database/select_flat_labels`:  `select flat` prefixed labels in
-  the top cell with "Topmost cell of the window/".  devel:Simon/tia_core
-  (fixed 2022).
-- **[A]** `database/select_area_subcell`:  `select area subcell` did not
-  select subcells.  devel:select_cell (fixed 2025-02).  Related open items
-  [C]:  `select more cell <instance>` fails (#295);  `select area` with
-  several contact layers fails (#504).
+(Not worth testing:  specific tile plane corruption bugs, such as the
+"stretch" corruption of 2025 in devel:corruption.  There are too many
+possibilities, and the effects of corruption are hard to predict.)
+
+- **[C]** `select more cell <instance>` fails (#295);  `select area` with
+  several contact layers fails (#504).  (`select area subcell` selecting
+  only unexpanded instances is intended:  the February 2025 change to
+  select expanded instances too was reverted in commit 2630ebcd, August
+  2025, so no test for it.)
+- **[A]** `database/maskhints_overflow`:  a large number of mask hints
+  overflowed a string buffer when read back from a .mag file
+  (devel:Vicente/scripting, fixed 2023).  Mask hints are now a "plane"
+  property, so check whether this still applies.
 - **[A]** `database/units_save`:  `units` with FIXED_BBOX gave a property
   command missing a key, and `save <x>.tcl` misreported the file name
   (devel:units, fixed 2026-03).
@@ -335,6 +322,23 @@ better written as part of that work.
 
 ## Done
 
+- `database/instance_position`:  the new `instance position` command
+  (8.3.689).
+- `database/select_area_labels`:  what each form of `select area`
+  selects;  `select area` did not select labels on space (fixed in
+  8.3.689).
+- `database/splitpaint_box`:  zero-size box and locked layers (#94, #95;
+  fails with 8.3.230).
+- `database/copy_undo`:  repeated copy and undo (fails with 8.3.522).
+- `database/bbox_labels`:  bounding box with label text outside the paint
+  (fails with 8.3.545).
+- `database/property_scaling`:  FIXED_BBOX and mask hints under
+  `scalegrid` and `move origin` (fails with 8.3.517;  also found that
+  8.3.688 crashes, fixed in 8.3.689).
+- `database/erase_label_corner`:  labels stay attached after erasing part
+  of the shape (#305;  fails with 8.3.478 before the fix).
+- `database/select_flat_labels`:  label names after `select flat` (fails
+  with 8.3.275).
 - `database/dup_instance`:  coincident instances with different
   transforms were discarded as duplicates (fails with 8.3.373 from before
   the fix).

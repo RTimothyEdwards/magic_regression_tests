@@ -65,12 +65,20 @@ cif/                  CIF/GDS input and output tests
     gds_compressed_ref/  GDS output when the vendor GDS file is compressed
     gds_magnification/  GDS instances with magnification
     maxrect_hier/     Hierarchical output of "maxrect external" layers
-database/             Database (.mag file) tests
+database/             Database, editing, and command tests
+    bbox_labels/      Cell bounding box with label text outside the paint
     cell_paths/       Cell file paths for cells shared between directories
+    copy_undo/        Repeated "copy" of a cell instance followed by "undo"
     dup_instance/     Coincident cell instances with different transforms
+    erase_label_corner/  Labels stay attached when part of the shape is erased
     exit_code/        Exit status of magic in batch mode
+    instance_position/  The "instance position" command
     long_use_name/    Cell use names longer than the read and write buffers
+    property_scaling/ FIXED_BBOX and mask hints under scalegrid and move origin
+    select_area_labels/  What "select area" selects (paint, labels, instances)
+    select_flat_labels/  Label names after "select flat"
     split_tile_paint/ Painting over split (non-Manhattan) tiles
+    splitpaint_box/   "splitpaint" with a zero-size box or a locked layer
 def/                  LEF and DEF tests
     read_special_routes/  DEF special nets with several routed segments
 drc/                  DRC tests
