@@ -6,10 +6,17 @@
 # Environment variables (all optional):
 #
 #   MAGIC      Command used to run magic.  Default "magic".  To test a
-#              build staged with "make install DESTDIR=<dir>", use e.g.
-#              MAGIC="env CAD_ROOT=<dir>/usr/local/lib bash <dir>/usr/local/bin/magic"
+#              build installed with "./configure --prefix=<dir>", use
+#              MAGIC=<dir>/bin/magic.  (A build staged with "make install
+#              DESTDIR=<dir>" and run with CAD_ROOT=<dir>/usr/local/lib
+#              may silently run the copy of magic installed in /usr/local
+#              instead;  check the "revision" line in the test's log.)
 #   PDK_ROOT   Location of installed open PDKs.  Default /usr/share/pdk.
 #   KEEPWORK   If set, do not delete the test's work/ directory on success.
+#   VALGRIND   If set, run magic under valgrind (much slower).  A test then
+#              also fails if valgrind reports any memory errors;  the
+#              reports are kept in the test's work/ directory as
+#              valgrind.<pid>.log.
 
 : ${PDK_ROOT:=/usr/share/pdk}
 : ${MAGIC:=magic}
@@ -19,10 +26,38 @@ rm -rf ${WORK}
 mkdir -p ${WORK}
 
 # Run magic in batch mode with the given arguments.  All output goes to
-# stdout so that it can be filtered or saved to a log.
+# stdout so that it can be filtered or saved to a log.  The exit status is
+# magic's own (also under valgrind, whose reports are checked by finish()).
 
 run_magic() {
-    ${MAGIC} -dnull -noconsole "$@" 2>&1
+    if [ -n "${VALGRIND}" ]; then
+	# The magic command is normally a shell script, so follow it into
+	# the programs it runs.
+	valgrind --trace-children=yes --num-callers=30 \
+		--log-file=${WORK}/valgrind.%p.log \
+		${MAGIC} -dnull -noconsole "$@" 2>&1
+    else
+	${MAGIC} -dnull -noconsole "$@" 2>&1
+    fi
+}
+
+# Under VALGRIND, check the valgrind reports in ${WORK}:  print a summary
+# of any that found errors.  Returns 1 if any did, 0 otherwise.
+
+check_valgrind() {
+    local f bad=0
+    [ -z "${VALGRIND}" ] && return 0
+    for f in ${WORK}/valgrind.*.log; do
+	[ -f "${f}" ] || continue
+	if grep -q "ERROR SUMMARY: [1-9]" ${f}; then
+	    echo "  valgrind:  $(grep -o 'ERROR SUMMARY: [0-9]* errors' ${f}) in $(basename ${f})"
+	    # The first error and where it happened
+	    grep -m1 -A4 "^==[0-9]*== [A-Z].*\(Invalid\|uninitialised\|Mismatched\|overlap\|Syscall\)" ${f} |
+		    sed 's/^==[0-9]*== /    /'
+	    bad=1
+	fi
+    done
+    return ${bad}
 }
 
 # Check that a PDK exists, or else skip the test (exit code 77).
@@ -73,6 +108,11 @@ single_rule_tech() {
 # Remove the work directory on success unless KEEPWORK is set.
 
 finish() {
+    if [ "$1" = "0" ] && ! check_valgrind; then
+	set -- 1
+    elif [ "$1" != "0" ]; then
+	check_valgrind
+    fi
     if [ "$1" = "0" ]; then
 	echo "PASS: $(basename ${TESTDIR})"
 	[ -z "${KEEPWORK}" ] && rm -rf ${WORK}

@@ -5,6 +5,7 @@
 
 TESTDIR=$(cd $(dirname $0) && pwd)
 source ${TESTDIR}/../../common/common.sh
+require_magic_version 8.3.690
 
 cd ${WORK}
 echo "" > empty.rc

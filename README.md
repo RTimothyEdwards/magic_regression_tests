@@ -24,13 +24,20 @@ Environment variables:
 | `MAGIC`    | `magic`         | Command used to run magic |
 | `PDK_ROOT` | `/usr/share/pdk`| Location of the installed open PDKs |
 | `KEEPWORK` | (unset)         | Keep each test's `work/` directory even if the test passes |
+| `VALGRIND` | (unset)         | Run magic under valgrind;  a test also fails if valgrind reports memory errors (reports are kept in `work/`).  Much slower:  for occasional runs. |
 
 To test a build of magic without installing it over an existing
-installation, stage it with `make install DESTDIR=<dir>` and run:
+installation, configure it with `./configure --prefix=<dir>`, then `make`
+and `make install`, and run:
 
 ```
-MAGIC="env CAD_ROOT=<dir>/usr/local/lib bash <dir>/usr/local/bin/magic" ./run_tests.sh
+MAGIC=<dir>/bin/magic ./run_tests.sh
 ```
+
+(Staging with `make install DESTDIR=<dir>` and running it with
+`CAD_ROOT=<dir>/usr/local/lib` does not always work:  older versions of
+magic then load the copy of magic installed in /usr/local instead.  The
+"revision" line at the start of a test's log shows which version ran.)
 
 Most tests use the open PDKs (gf180mcuD, sky130A) as installed by
 [open_pdks](https://github.com/RTimothyEdwards/open_pdks).  A test whose

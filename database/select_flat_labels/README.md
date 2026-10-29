@@ -16,3 +16,13 @@ hierarchy separator, "/" in 2022 and "." now, is not checked).
 With magic 8.3.275 (just before the fix, built with `-fpermissive`), the
 labels are "A", "Topmost cell in the window/A", and "Topmost cell in the
 window/sub_0/B".
+
+## Crash in "select flat" (fixed in 8.3.690)
+
+The 2022 fix made the label search skip the path name of a top level
+window, but then `dbCellLabelSrFunc()` (`database/DBcellsrch.c`) still
+restored the path using a pointer that had not been set in that case,
+writing through an uninitialized pointer.  This test does exactly that
+(`select flat` searches from the top level window), so it crashed on some
+machines (it was first seen on GitHub;  valgrind shows the uninitialized
+pointer everywhere).  Fixed in magic 8.3.690, so the test requires 8.3.690.
