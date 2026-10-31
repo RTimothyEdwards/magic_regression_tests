@@ -322,6 +322,8 @@ better written as part of that work.
 
 ## Done
 
+- `cif/gds_relative_path`:  GDS_FILE relative to the directory of the
+  cell's .mag file (fixed in 8.3.690).
 - `database/instance_position`:  the new `instance position` command
   (8.3.689).
 - `database/select_area_labels`:  what each form of `select area`

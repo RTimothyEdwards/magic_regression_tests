@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 #
-# check.py --- Compare the geometry of the original blk.gds with out.gds.
+# gds_same_layers.py --- Check that two GDS files have the same flattened
+# geometry on every layer and datatype found in the first one.
 #
-# Usage:  check.py <blk_orig.gds> <out.gds>
+# Usage:  gds_same_layers.py <reference.gds> <test.gds>
 #
-# Compares every layer and datatype found in the original file.
+# Prints one line per layer and exits with status 1 if any layer differs
+# (or is empty in the reference).
 
 import os
 import struct
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                '..', '..', 'common'))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gdslib
 
 def layers(fname):

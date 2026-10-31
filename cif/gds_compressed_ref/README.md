@@ -11,11 +11,12 @@ looks for the compressed file as well.  (Notes in
 
 ## What the test does
 
-In scmos:  write a small cell `blk` to `blk.gds`;  read it back as a
-read-only cell, place it in `top`, and save both `.mag` files;  compress
-`blk.gds` to `blk.gds.gz`;  then load `top` again and write `out.gds`.  The
-test fails on any "Calma output error", and `check.py` checks that the
-geometry of `blk` in `out.gds` is the same as in the original file.
+In scmos: write a small cell `blk` to `blk.gds`; read it back as a read-
+only cell, place it in `top`, and save both `.mag` files; compress
+`blk.gds` to `blk.gds.gz`; then load `top` again and write `out.gds`.
+The test fails on any "Calma output error", and
+`common/gds_same_layers.py` checks that the geometry of `blk` in
+`out.gds` is the same as in the original file.
 
 With magic 8.3.518 (just before the fix), `blk` is left out of the
 output with the error above.

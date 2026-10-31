@@ -71,6 +71,7 @@ cif/                  CIF/GDS input and output tests
     gds_aref/         GDS arrays with rotation and a single row or column
     gds_compressed_ref/  GDS output when the vendor GDS file is compressed
     gds_magnification/  GDS instances with magnification
+    gds_relative_path/  GDS_FILE relative to the cell's own directory
     maxrect_hier/     Hierarchical output of "maxrect external" layers
 database/             Database, editing, and command tests
     bbox_labels/      Cell bounding box with label text outside the paint

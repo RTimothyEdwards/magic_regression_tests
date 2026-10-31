@@ -35,7 +35,7 @@ if grep -q "Calma output error" out.log; then
     status=1
 fi
 
-python3 ${TESTDIR}/check.py blk_orig.gds out.gds | sed 's/^/  /'
+python3 ${TESTDIR}/../../common/gds_same_layers.py blk_orig.gds out.gds | sed 's/^/  /'
 [ ${PIPESTATUS[0]} = 0 ] || status=1
 
 finish ${status}
