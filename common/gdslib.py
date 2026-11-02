@@ -56,6 +56,12 @@ def boundary(x1, y1, x2, y2, layer=68, datatype=20):
             rec(0x10, 3, i4(x1, y1, x2, y1, x2, y2, x1, y2, x1, y1)) +
             rec(0x11, 0))
 
+def text(x, y, string, layer=68, datatype=16):
+    """A text label (a port name when placed on a pin datatype)"""
+    return (rec(0x0c, 0) + rec(0x0d, 2, i2(layer)) + rec(0x16, 2, i2(datatype)) +
+            rec(0x10, 3, i4(x, y)) + rec(0x19, 6, string.encode()) +
+            rec(0x11, 0))
+
 def strans(mag=1, angle=0, reflect=False):
     if mag == 1 and angle == 0 and not reflect:
         return b''

@@ -271,9 +271,20 @@ better written as part of that work.
   (devel:Ahmed/rcx, fixed).
 - **[A]** `resis/empty_label`:  an empty-string label became a node name
   (devel:Taylor, fixed).  sky130A.
-- **[C]** `resis/killed_port`:  extresist killed a port node ("killnode
-  VSS"), disconnecting it (devel:extresist_open_net, from netgen #108;
-  also devel:Istvan, devel:Leonardo).  Status unclear.
+- **[A]** `resis/killed_port`:  extresist killed a port node ("killnode
+  VSS"), disconnecting it (devel:extresist_open_net, from netgen #108).
+  Cause found (2026-11):  the series simplification merged the port node
+  away.  Covered by `resis/port_names` with a purpose-built case;  the
+  IHP inverter itself checked by hand.  devel:Istvan and devel:Leonardo
+  not yet checked.
+- Done (2026-11, #568 and the via chains of #557):  `resis/wire_resistance`,
+  `resis/extract_thresholds`, `resis/via_chain`, `resis/port_names`,
+  `resis/cap_conservation`.
+- **[C]** Follow-ups found while writing those:  capacitance distribution
+  over the network (a port in the middle of a wire gets none of the
+  wire's capacitance;  the total is right);  `minres` cannot reduce
+  loops (Tim:  known, future work);  the tee/cross/branch structures and
+  coupling cases of the iic-jku PEX bench (sky130A, gf180mcuD, IHP).
 - **[C]** Open extresist and ext2spice issues from GitHub, each with a
   small example:  #550 (coupling capacitance moved to substrate and
   double-counted), #553 (resistor pi model applied to other devices), #556

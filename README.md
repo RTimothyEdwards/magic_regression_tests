@@ -67,6 +67,9 @@ The tests are run on GitHub by the workflows in `.github/workflows/`:
 ```
 run_tests.sh          Runs all tests (any directory containing run.sh)
 common/common.sh      Shared setup and helper functions for run.sh scripts
+common/gdslib.py      Small GDS writer and flattener
+common/spicenet.py    Resistance between nets of a SPICE netlist (extresist tests)
+common/resis_wire.tcl Draws and extracts a wire with ports (extresist tests)
 cif/                  CIF/GDS input and output tests
     gds_aref/         GDS arrays with rotation and a single row or column
     gds_compressed_ref/  GDS output when the vendor GDS file is compressed
@@ -93,6 +96,12 @@ drc/                  DRC tests
     derived_edge/     Euclidean corner checks on contact (derived) types
     halo_rounding/    Errors at DRC check area boundaries
     stdcell_libs/     DRC of standard cell libraries against a baseline
+resis/                Parasitic resistance extraction (extresist) tests
+    cap_conservation/ Total capacitance of a net with and without extresist
+    extract_thresholds/  Which nets are extracted for threshold/mindelay
+    port_names/       Ports remain distinct nodes of the network
+    via_chain/        Contact resistance of via chains with 1 to 8 cuts
+    wire_resistance/  Resistance of a straight wire on each layer
 ```
 
 ## Writing a test
