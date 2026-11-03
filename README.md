@@ -96,6 +96,8 @@ drc/                  DRC tests
     derived_edge/     Euclidean corner checks on contact (derived) types
     halo_rounding/    Errors at DRC check area boundaries
     stdcell_libs/     DRC of standard cell libraries against a baseline
+extract/              Extraction tests
+    sidewall_coupling/  Sidewall coupling between two parallel wires
 resis/                Parasitic resistance extraction (extresist) tests
     cap_conservation/ Total capacitance of a net with and without extresist
     extract_thresholds/  Which nets are extracted for threshold/mindelay
