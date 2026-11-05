@@ -8,7 +8,7 @@ source ${TESTDIR}/../../common/common.sh
 require_pdk sky130A
 
 PDK=${PDK_ROOT}/sky130A
-TECH=${PDK}/libs.tech/magic/sky130A.tech
+TECH=$(flat_tech ${PDK}/libs.tech/magic/sky130A.tech)
 RC=${PDK}/libs.tech/magic/sky130A.magicrc
 SPICENET="python3 ${TESTDIR}/../../common/spicenet.py"
 status=0
@@ -28,6 +28,7 @@ for layer in li:"(allli)/locali" m1:"(allm1)/metal1" m2:"(allm2)/metal2" \
 	m3:"(allm3)/metal3" m4:"(allm4)/metal4" m5:"(allm5)/metal5"; do
     name=${layer%%:*}
     rsh=$(sheet_res "${layer#*:}")
+    require_value "sheet resistance of ${layer#*:}" "${rsh}"
     # The ports are squares at the two ends;  the path is measured
     # between their centers.
     expect=$(echo "${rsh} * (${LEN} - ${WID}) / ${WID} / 1000" | bc -l)
@@ -47,7 +48,7 @@ elif abs(float(got) - exp) > 0.01 * exp:
 else:
     print('ok:  %s ohms (expected %.4g ohms)' % (got, exp))")
     echo "  ${name}:  ${result}"
-    [[ ${result} == FAIL* ]] && status=1
+    [[ ${result} == ok* ]] || status=1
     if [ -n "${dangling}" ]; then
 	echo "  ${name}:  FAIL:  unconnected subcircuit pins:  ${dangling}"
 	status=1

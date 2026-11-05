@@ -25,3 +25,7 @@ minimum spacing for IHP sg13cmos5l metal3).  With correct coefficients,
 the fixed halving matches OpenEMS for the IHP cap_cmomf capacitors of 10um
 or larger to about 3%, so a dense structure does not need a separate
 correction.
+
+Also checks offsets that are not on the layout grid, which must be used
+exactly:  a copy of the tech file is given offsets of 0.268 on metal1 and
+-0.106 on metal5, with a tolerance of 0.1%.

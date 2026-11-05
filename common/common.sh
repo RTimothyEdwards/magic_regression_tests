@@ -104,6 +104,50 @@ single_rule_tech() {
     ' $1 > $2
 }
 
+# flat_tech <tech file>
+#
+# Copy a tech file into the work directory with its "include" lines replaced
+# by the files they name, and print the path of the copy.  PDK tech files may
+# keep sections in included files, so anything that reads or edits a tech file
+# directly must use this.  As in magic, an included name is relative to the
+# directory of the tech file and may leave off the ".tech" suffix.
+
+flat_tech() {
+    local out=${WORK}/flat_$(basename $1)
+    python3 - "$1" "${out}" <<'EOF'
+import os, re, sys
+
+def expand(path, out):
+    with open(path) as f:
+        for line in f:
+            m = re.match(r'\s*include\s+(\S+)', line)
+            if not m:
+                out.write(line)
+                continue
+            name = m.group(1)
+            if not name.endswith('.tech'):
+                name += '.tech'
+            expand(os.path.join(os.path.dirname(path), name), out)
+
+with open(sys.argv[2], 'w') as out:
+    expand(sys.argv[1], out)
+EOF
+    echo ${out}
+}
+
+# require_value <description> <value>
+#
+# A value that a test reads from a tech file and uses to compute its expected
+# result must exist, or the test is not checking anything.  If it is empty,
+# fail the test.
+
+require_value() {
+    if [ -z "$2" ]; then
+	echo "  FAIL:  no value found for $1"
+	finish 1
+    fi
+}
+
 # Finish a test:  print PASS or FAIL and exit with status 0 or 1.
 # Remove the work directory on success unless KEEPWORK is set.
 

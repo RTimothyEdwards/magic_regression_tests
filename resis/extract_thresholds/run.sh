@@ -10,7 +10,7 @@ require_pdk sky130A
 require_magic_version 8.3.692
 
 PDK=${PDK_ROOT}/sky130A
-TECH=${PDK}/libs.tech/magic/sky130A.tech
+TECH=$(flat_tech ${PDK}/libs.tech/magic/sky130A.tech)
 RC=${PDK}/libs.tech/magic/sky130A.magicrc
 SPICENET="python3 ${TESTDIR}/../../common/spicenet.py"
 status=0
@@ -24,6 +24,9 @@ declare -A RSH
 RSH[li]=$(sheet_res "(allli)/locali")
 RSH[m1]=$(sheet_res "(allm1)/metal1")
 RSH[m4]=$(sheet_res "(allm4)/metal4")
+for layer in li m1 m4; do
+    require_value "sheet resistance of ${layer}" "${RSH[${layer}]}"
+done
 
 # run_case <name> <layer> <length> <width> <yes|no> <extresist options...>
 #   "yes" if the net must be extracted (a resistor network between IN and

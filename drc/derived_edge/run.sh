@@ -7,7 +7,7 @@ TESTDIR=$(cd $(dirname $0) && pwd)
 source ${TESTDIR}/../../common/common.sh
 require_pdk gf180mcuD
 
-TECH=${PDK_ROOT}/gf180mcuD/libs.tech/magic/gf180mcuD.tech
+TECH=$(flat_tech ${PDK_ROOT}/gf180mcuD/libs.tech/magic/gf180mcuD.tech)
 status=0
 
 # run_case <scale> <drc rule> <sweep case...>

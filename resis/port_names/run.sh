@@ -10,7 +10,7 @@ require_pdk sky130A
 require_magic_version 8.3.692
 
 PDK=${PDK_ROOT}/sky130A
-TECH=${PDK}/libs.tech/magic/sky130A.tech
+TECH=$(flat_tech ${PDK}/libs.tech/magic/sky130A.tech)
 RC=${PDK}/libs.tech/magic/sky130A.magicrc
 SPICENET="python3 ${TESTDIR}/../../common/spicenet.py"
 status=0
@@ -27,8 +27,10 @@ sheet_res() {
 
 run_case() {
     local name=$1 layer=$2 len=$3 cls=$4; shift 4
-    local opts="$*" half r_im r_mo r_io dangling result
-    half=$(echo "$(sheet_res ${cls}) * (${len} - 1) / 2 / 1000" | bc -l)
+    local opts="$*" rsh half r_im r_mo r_io dangling result
+    rsh=$(sheet_res ${cls})
+    require_value "sheet resistance of ${cls}" "${rsh}"
+    half=$(echo "${rsh} * (${len} - 1) / 2 / 1000" | bc -l)
     WIRELAYER=${layer} WIRELEN=${len} WIREWID=1 WIREMID=1 WIRENAME=${name} \
 	RESOPTS="${opts}" \
 	run_magic -rcfile ${RC} ${TESTDIR}/../../common/resis_wire.tcl \
@@ -50,7 +52,7 @@ if '${dangling}'.strip():
     err.append('unconnected pins: ${dangling}')
 print(('FAIL:  ' + ';  '.join(err)) if err else 'ok:  IN-MID ${r_im}, MID-OUT ${r_mo} ohms')")
     printf '  %-12s %-34s %s\n' "${name}:" "(${opts})" "${result}"
-    [[ ${result} == FAIL* ]] && status=1
+    [[ ${result} == ok* ]] || status=1
 }
 
 # Halves of 12.4 ohms (above the default minres of 1 ohm)

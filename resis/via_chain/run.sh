@@ -10,7 +10,7 @@ require_pdk sky130A
 require_magic_version 8.3.692
 
 PDK=${PDK_ROOT}/sky130A
-TECH=${PDK}/libs.tech/magic/sky130A.tech
+TECH=$(flat_tech ${PDK}/libs.tech/magic/sky130A.tech)
 RC=${PDK}/libs.tech/magic/sky130A.magicrc
 SPICENET="python3 ${TESTDIR}/../../common/spicenet.py"
 status=0
@@ -29,6 +29,7 @@ cut_res() {
 for level in li_m1:mcon m1_m2:m2c m2_m3:m3c m3_m4:via3 m4_m5:via4; do
     lv=${level%%:*}
     rcut=$(cut_res ${level#*:})
+    require_value "resistance of ${level#*:}" "${rcut}"
     declare -A R=()
     line=""
     for n in 1 2 4 8; do
@@ -58,7 +59,7 @@ else:
             err.append('R(1) - R(%d) = %.4g, expected %.4g' % (n, d, exp))
     print(('FAIL:  ' + ';  '.join(err)) if err else 'ok')")
     printf '  %-6s cut %6s mohm:%s  %s\n' ${lv} ${rcut} "${line}" "${result}"
-    [[ ${result} == FAIL* ]] && status=1
+    [[ ${result} == ok* ]] || status=1
     unset R
 done
 

@@ -1,0 +1,28 @@
+VERSION 5.7 ;
+MACRO sized
+  CLASS BLOCK ;
+  SIZE 5 BY 5 ;
+  OBS
+    LAYER Metal1 ;
+    RECT 0 0 2 2 ;
+  END
+END sized
+MACRO nosize
+  CLASS BLOCK ;
+  OBS
+    LAYER Metal1 ;
+    RECT 0 0 2 2 ;
+  END
+END nosize
+MACRO annotated
+  CLASS BLOCK ;
+  SIZE 5 BY 5 ;
+  PIN PIN1
+    DIRECTION INPUT ;
+    PORT
+      LAYER Metal1 ;
+      RECT 0 0 2 2 ;
+    END
+  END PIN1
+END annotated
+END LIBRARY

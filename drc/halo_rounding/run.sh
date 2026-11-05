@@ -6,7 +6,7 @@ TESTDIR=$(cd $(dirname $0) && pwd)
 source ${TESTDIR}/../../common/common.sh
 require_pdk gf180mcuD
 
-TECH=${PDK_ROOT}/gf180mcuD/libs.tech/magic/gf180mcuD.tech
+TECH=$(flat_tech ${PDK_ROOT}/gf180mcuD/libs.tech/magic/gf180mcuD.tech)
 
 # The only rule is 240 at scalefactor 50 (4.8 lambda), so the DRC halo is
 # set by this rule.  The halo must round up to 5 lambda, not down to 4.

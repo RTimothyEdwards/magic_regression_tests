@@ -6,7 +6,7 @@ TESTDIR=$(cd $(dirname $0) && pwd)
 source ${TESTDIR}/../../common/common.sh
 require_pdk sky130A
 
-TECH=${PDK_ROOT}/sky130A/libs.tech/magic/sky130A.tech
+TECH=$(flat_tech ${PDK_ROOT}/sky130A/libs.tech/magic/sky130A.tech)
 
 # Add an output layer MAXM1 (GDS 200/0) to the gdsii style:  the bounding
 # box of each connected region of metal1.
