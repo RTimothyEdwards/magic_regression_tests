@@ -60,7 +60,7 @@ differ() {
 }
 
 caps base
-if ! grep -q '^W P ' base.caps; then
+if ! grep -qE '^(W P|P W) ' base.caps; then
     echo "  base             FAIL (no W to P coupling)"
     status=1
 fi
