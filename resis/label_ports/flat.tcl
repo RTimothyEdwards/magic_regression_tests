@@ -1,5 +1,5 @@
-# One sky130 inv_2 cell, flattened, then R-C extracted with
-# "extresist mindelay 0".
+# R-C extract a flattened copy of the sky130 inv_2 cell.  Flattening
+# removes the port flags, so its labels are no longer ports.
 snap internal
 load top
 box 0 0 0 0
