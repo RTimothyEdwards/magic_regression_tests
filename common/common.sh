@@ -19,6 +19,7 @@
 #              valgrind.<pid>.log.
 
 : ${PDK_ROOT:=/usr/share/pdk}
+export PDK_ROOT
 : ${MAGIC:=magic}
 
 WORK=${TESTDIR}/work
