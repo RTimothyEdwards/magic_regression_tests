@@ -101,6 +101,7 @@ database/             Database, editing, and command tests
     splitpaint_box/   "splitpaint" with a zero-size box or a locked layer
 def/                  LEF and DEF tests
     read_special_routes/  DEF special nets with several routed segments
+    write_net_blockage/  "def write" with an unlabeled net (written as a blockage)
 drc/                  DRC tests
     bloatall_marks/   Tile marks left by bloat-all and tagged (extract after DRC)
     derived_edge/     Euclidean corner checks on contact (derived) types
