@@ -102,6 +102,7 @@ resis/                Parasitic resistance extraction (extresist) tests
     cap_conservation/ Total capacitance of a net with and without extresist
     extract_thresholds/  Which nets are extracted for threshold/mindelay
     port_names/       Ports remain distinct nodes of the network
+    triangle_order/   Repeatable resistor simplification at high-degree nodes
     via_chain/        Contact resistance of via chains with 1 to 8 cuts
     wire_resistance/  Resistance of a straight wire on each layer
 ```
