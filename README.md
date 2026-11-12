@@ -102,6 +102,7 @@ database/             Database, editing, and command tests
 def/                  LEF and DEF tests
     read_special_routes/  DEF special nets with several routed segments
 drc/                  DRC tests
+    bloatall_marks/   Tile marks left by bloat-all and tagged (extract after DRC)
     derived_edge/     Euclidean corner checks on contact (derived) types
     halo_rounding/    Errors at DRC check area boundaries
     stdcell_libs/     DRC of standard cell libraries against a baseline

@@ -1,0 +1,84 @@
+tech
+    format 35
+    tiny
+end
+version
+    version 0.1
+    description "bloat-all and tagged mark reset (GitHub issue 570)"
+end
+planes
+    active,a
+    metal1,m1
+end
+types
+    active  psd
+    active  nsd
+    metal1  metal1,m1
+    active  psc
+    active  nsc
+end
+contact
+    psc psd metal1
+    nsc nsd metal1
+end
+styles
+    styletype mos
+    psd 13
+    nsd 12
+    metal1 20
+    psc 33
+    nsc 32
+end
+compose
+end
+connect
+    psd,psc psd,psc
+    nsd,nsc nsd,nsc
+    metal1,psc,nsc metal1,psc,nsc
+end
+cifoutput
+style gds
+    scalefactor 10 nanometers
+    layer M1 metal1,psc,nsc
+        calma 2 0
+style drc1
+    scalefactor 10 nanometers
+    templayer tap psd
+        bloat-all psc psd
+style drc2
+    scalefactor 10 nanometers
+    templayer tap psd
+        bloat-all psc psd,nsc
+style drc3
+    scalefactor 10 nanometers
+    templayer tap
+        tagged VSS psc,psd
+end
+cifinput
+style gds
+    scalefactor 10 nanometers
+    layer metal1 M1
+        calma 2 0
+end
+drc
+    style default variants (plain),(c1),(c2),(c3)
+    scalefactor 10
+    width metal1 10 "m1 width"
+    variants (c1)
+    cifstyle drc1
+    cifmaxwidth tap 100000 bend_ok "tap too wide"
+    variants (c2)
+    cifstyle drc2
+    cifmaxwidth tap 100000 bend_ok "tap too wide"
+    variants (c3)
+    cifstyle drc3
+    cifmaxwidth tap 100000 bend_ok "tap too wide"
+    variants *
+end
+extract
+    style default
+    cscale 1
+    lambda 1
+    step 100
+    sidehalo 0
+end
