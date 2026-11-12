@@ -10,12 +10,20 @@ them with the source.
 ```
 ./run_tests.sh              # run all tests
 ./run_tests.sh drc          # run all tests under drc/
+./run_tests.sh -j 1         # run the tests one at a time
 ./drc/derived_edge/run.sh   # run one test
 ```
 
 Each test prints a summary of what it checked and ends with a line
 `PASS: <name>`, `FAIL: <name>`, or `SKIP: <reason>`.  `run_tests.sh`
 prints a count of each at the end and exits non-zero if any test failed.
+
+`run_tests.sh` runs up to 20 tests at the same time (set with `-j <n>` or
+the `JOBS` variable).  Each test's output is shown when it finishes, with
+the time it took, so the tests are listed in the order they finish.  With
+`-j 1` they run in order and their output is shown as they run.  Because
+tests run at the same time, a test must not write anywhere outside its own
+directory.  Running in parallel needs bash 5.1 or newer.
 
 Environment variables:
 
@@ -25,6 +33,7 @@ Environment variables:
 | `PDK_ROOT` | `/usr/share/pdk`| Location of the installed open PDKs |
 | `KEEPWORK` | (unset)         | Keep each test's `work/` directory even if the test passes |
 | `VALGRIND` | (unset)         | Run magic under valgrind;  a test also fails if valgrind reports memory errors (reports are kept in `work/`).  Much slower:  for occasional runs. |
+| `JOBS`     | `20`            | Number of tests to run at the same time (`-j` overrides it) |
 
 To test a build of magic without installing it over an existing
 installation, configure it with `./configure --prefix=<dir>`, then `make`
