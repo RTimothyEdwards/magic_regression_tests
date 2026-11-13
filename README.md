@@ -98,6 +98,7 @@ database/             Database, editing, and command tests
     property_scaling/ FIXED_BBOX and mask hints under scalegrid and move origin
     select_area_labels/  What "select area" selects (paint, labels, instances)
     select_flat_labels/  Label names after "select flat"
+    select_net_names/  "select net" through labels of the same name (extract do unique)
     split_tile_paint/ Painting over split (non-Manhattan) tiles
     splitpaint_box/   "splitpaint" with a zero-size box or a locked layer
 def/                  LEF and DEF tests
