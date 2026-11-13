@@ -54,7 +54,10 @@ jobs:
       - name: Build magic
         working-directory: magic
         run: |
-          ./configure
+          # Magic still has many K&R-style "extern int f();" prototypes, which
+          # C23 (the default in GCC 15 and later) reads as "f(void)".  Until
+          # the conversion to ANSI prototypes is finished, build as C17.
+          CFLAGS="-g -std=gnu17" ./configure
           make prepare
           make -j$(nproc)
           make install DESTDIR=${GITHUB_WORKSPACE}/staging

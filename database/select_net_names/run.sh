@@ -29,11 +29,13 @@ if [ "${nwarn}" != "${nexpect}" ]; then
 else
     echo "  ${nwarn} warnings:  ok"
 fi
-# "getnode" follows the same connections (but does not warn).
+# "getnode" follows the same connections (but does not warn), and with
+# "getnode alias on" gives a list of names for each node.
 run_magic -T scmos -norcfile ${TESTDIR}/getnode.tcl < /dev/null > getnode.log
-found=$(grep "^GN " getnode.log | tr '\n' ' ')
-if [ "${found}" != "GN unique N GN nounique P " ]; then
-    echo "  getnode:  found \"${found}\", expected \"GN unique N GN nounique P\""
+grep "^G[NA] " getnode.log > getnode
+if ! diff ${TESTDIR}/getnode_expected getnode > getnode.diff; then
+    echo "  getnode results differ from the expected (< expected, > found):"
+    sed 's/^/    /' getnode.diff
     status=1
 elif grep -q "connected by the name" getnode.log; then
     echo "  getnode:  printed a warning"

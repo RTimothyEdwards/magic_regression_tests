@@ -30,3 +30,9 @@ extraction (`ext2spice` with `cthresh 0`, flat) with each setting.
 `getnode` is also checked:  from a wire with label N, connected by name
 to a wire that also has the top-level port P, it must give P with
 `extract no unique` and N with `extract do unique`, without warnings.
+
+`getnode alias on` is checked as well (`getnode_expected`):  each node
+gives a list of its names, the chosen name first and each name once.  A
+node with a single name gives just that name, and with more than one
+node selected, there is one list per node.  With `alias off`, only the
+chosen names are given.

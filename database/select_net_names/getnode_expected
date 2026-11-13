@@ -1,0 +1,8 @@
+GN unique N
+GN nounique P
+GA unique N
+GA nounique {P N}
+GA labels {R Q}
+GA nolabel m1_0_60#
+GA twonodes {P N} {R Q}
+GA twonodes_off P R
