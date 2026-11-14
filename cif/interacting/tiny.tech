@@ -1,0 +1,66 @@
+tech
+    format 35
+    tiny
+end
+version
+    version 0.1
+    description "CIF operators overlapping, interacting, and their inverses"
+end
+planes
+    active,a
+    metal1,m1
+end
+types
+    active  poly,p
+    metal1  metal1,m1
+end
+contact
+end
+styles
+    styletype mos
+    poly 1
+    metal1 20
+end
+compose
+end
+connect
+end
+cifoutput
+style sel
+    scalefactor 50 nanometers
+    # Each operator with a magic layer, and with a CIF layer
+    templayer P poly
+    templayer ALL metal1
+    templayer OV metal1
+        overlapping poly
+    templayer NOV metal1
+        nonoverlapping poly
+    templayer INT metal1
+        interacting poly
+    templayer NINT metal1
+        noninteracting poly
+    templayer OVc metal1
+        overlapping P
+    templayer NOVc metal1
+        nonoverlapping P
+    templayer INTc metal1
+        interacting P
+    templayer NINTc metal1
+        noninteracting P
+end
+cifinput
+style sel
+    scalefactor 50 nanometers
+end
+drc
+    style default
+    scalefactor 50
+    variants *
+end
+extract
+    style default
+    cscale 1
+    lambda 1
+    step 100
+    sidehalo 0
+end
