@@ -93,6 +93,7 @@ database/             Database, editing, and command tests
     dup_instance/     Coincident cell instances with different transforms
     erase_label_corner/  Labels stay attached when part of the shape is erased
     exit_code/        Exit status of magic in batch mode
+    file_locking/     Read-only cells from file locks and write permission
     instance_position/  The "instance position" command
     long_use_name/    Cell use names longer than the read and write buffers
     netlist_split_tiles/  Netlist "ripup" and "verify" on split tiles
