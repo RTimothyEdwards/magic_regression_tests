@@ -116,6 +116,9 @@ extract/              Extraction tests
 resis/                Parasitic resistance extraction (extresist) tests
     cap_conservation/ Total capacitance of a net with and without extresist
     extract_thresholds/  Which nets are extracted for threshold/mindelay
+    input_scales/     Same R-C network for any R/C scale in the .ext file
+    invalid_skip/     "extresist skip" with an unknown layer name
+    long_node_names/  Terminal names longer than 1000 characters
     port_names/       Ports remain distinct nodes of the network
     triangle_order/   Repeatable resistor simplification at high-degree nodes
     via_chain/        Contact resistance of via chains with 1 to 8 cuts
