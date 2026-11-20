@@ -110,7 +110,7 @@ PDK.  Items are marked:
   is expected to fail until it is fixed.
 
 Not listed:  issues that turned out to be user errors, PDK errors (fixed in
-open_pdks), problems in other tools (klayout, netgen, OpenROAD), build and
+open-pdks), problems in other tools (klayout, netgen, OpenROAD), build and
 installation problems, and questions.
 
 ### Database, editing, and commands

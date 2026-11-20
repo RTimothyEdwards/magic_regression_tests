@@ -49,8 +49,9 @@ magic then load the copy of magic installed in /usr/local instead.  The
 "revision" line at the start of a test's log shows which version ran.)
 
 Most tests use the open PDKs (gf180mcuD, sky130A) as installed by
-[open_pdks](https://github.com/RTimothyEdwards/open_pdks).  A test whose
-PDK is not installed is skipped.
+[open-pdks](https://github.com/fossi-foundation/open-pdks), and some use
+ihp-sg13g2 from [IHP-Open-PDK](https://github.com/IHP-GmbH/IHP-Open-PDK).
+A test whose PDK is not installed is skipped.
 
 ## Automatic runs on GitHub
 
