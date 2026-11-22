@@ -45,7 +45,7 @@ def check_case(magic, rc, directory, stacked, orientation):
     directory.mkdir()
     (directory / "layout.tcl").write_text(layout(stacked, orientation), encoding="utf-8")
     with (directory / "magic.log").open("w", encoding="utf-8") as output:
-        process = subprocess.run([magic, "-dnull", "-noconsole", "-rcfile", str(rc),
+        process = subprocess.run(shlex.split(magic) + ["-dnull", "-noconsole", "-rcfile", str(rc),
                                   "layout.tcl"], cwd=directory, stdin=subprocess.DEVNULL,
                                  stdout=output, stderr=subprocess.STDOUT, timeout=60)
     log = (directory / "magic.log").read_text(encoding="utf-8", errors="replace")

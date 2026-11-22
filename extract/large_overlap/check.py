@@ -35,7 +35,7 @@ for side in [20, 100, 200, 231.70, 231.71, 300, 450, 1000]:
     environment = dict(os.environ, SIDE_UM=str(side))
     try:
         with (directory / "magic.log").open("w", encoding="utf-8") as output:
-            process = subprocess.run([magic, "-dnull", "-noconsole", "-rcfile", str(rc),
+            process = subprocess.run(shlex.split(magic) + ["-dnull", "-noconsole", "-rcfile", str(rc),
                                       str(Path(__file__).with_name("plate.tcl"))],
                                      cwd=directory, env=environment, stdin=subprocess.DEVNULL,
                                      stdout=output, stderr=subprocess.STDOUT, timeout=60)
