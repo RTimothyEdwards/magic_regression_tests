@@ -117,6 +117,7 @@ extract/              Extraction tests
     sidewall_coupling/  Sidewall coupling between two parallel wires
 resis/                Parasitic resistance extraction (extresist) tests
     cap_conservation/ Total capacitance of a net with and without extresist
+    coincident_ports/ Two ports on one point stay shorted with extresist
     extract_thresholds/  Which nets are extracted for threshold/mindelay
     input_scales/     Same R-C network for any R/C scale in the .ext file
     invalid_skip/     "extresist skip" with an unknown layer name
