@@ -114,6 +114,7 @@ drc/                  DRC tests
     replace_child/    Errors of a new cell replacing an instance shown in the parent
     stdcell_libs/     DRC of standard cell libraries against a baseline
 extract/              Extraction tests
+    dss_device_records/  Two device records for one model (one- and two-sided DSS FETs)
     sidewall_coupling/  Sidewall coupling between two parallel wires
 resis/                Parasitic resistance extraction (extresist) tests
     cap_conservation/ Total capacitance of a net with and without extresist

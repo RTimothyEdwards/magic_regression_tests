@@ -1,0 +1,66 @@
+magic
+tech gf180mcuD
+timestamp 0
+<< nmos >>
+rect 18 0 32 128
+rect 135 -2 149 126
+<< ndiff >>
+rect -9 126 9 128
+rect -9 2 -7 126
+rect 0 2 9 126
+rect -9 0 9 2
+rect 32 126 51 128
+rect 32 2 41 126
+rect 48 2 51 126
+rect 32 0 51 2
+rect 108 124 126 126
+rect 108 0 110 124
+rect 117 0 126 124
+rect 108 -2 126 0
+rect 158 124 176 126
+rect 158 0 166 124
+rect 173 0 176 124
+rect 158 -2 176 0
+<< ndiffc >>
+rect -7 2 0 126
+rect 41 2 48 126
+rect 110 0 117 124
+rect 166 0 173 124
+<< psubdiff >>
+rect 2 -29 171 -27
+rect 2 -36 5 -29
+rect 168 -36 171 -29
+rect 2 -38 171 -36
+<< psubdiffcont >>
+rect 5 -36 168 -29
+<< polysilicon >>
+rect 18 128 32 143
+rect 135 126 149 141
+rect 18 -10 32 0
+rect 135 -12 149 -2
+<< ndiffres >>
+rect 9 0 18 128
+rect 126 -2 135 126
+rect 149 -2 158 126
+<< metal1 >>
+rect -7 126 0 133
+rect -7 -3 0 2
+rect 41 126 48 133
+rect 41 -3 48 2
+rect 110 124 117 131
+rect 110 -5 117 0
+rect 166 124 173 131
+rect 166 -5 173 0
+rect -3 -29 175 -24
+rect -3 -36 5 -29
+rect 168 -36 175 -29
+rect -3 -42 175 -36
+<< labels >>
+flabel metal1 -4 131 -4 131 0 FreeSans 80 0 0 0 S1
+flabel metal1 44 131 44 131 0 FreeSans 80 0 0 0 D1
+flabel polysilicon 24 137 24 137 0 FreeSans 80 0 0 0 G1
+flabel polysilicon 141 135 141 135 0 FreeSans 80 0 0 0 G2
+flabel metal1 113 128 113 128 0 FreeSans 80 0 0 0 S2
+flabel metal1 169 128 169 128 0 FreeSans 80 0 0 0 D2
+flabel metal1 -1 -33 -1 -33 0 FreeSans 80 0 0 0 B
+<< end >>
