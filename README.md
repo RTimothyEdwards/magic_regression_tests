@@ -110,6 +110,7 @@ def/                  LEF and DEF tests
 drc/                  DRC tests
     bloatall_marks/   Tile marks left by bloat-all and tagged (extract after DRC)
     derived_edge/     Euclidean corner checks on contact (derived) types
+    euclidean_long_rule/  Euclidean distance for rules over 4095 internal units
     halo_rounding/    Errors at DRC check area boundaries
     replace_child/    Errors of a new cell replacing an instance shown in the parent
     stdcell_libs/     DRC of standard cell libraries against a baseline
